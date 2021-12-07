@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+    <table>
+        {% for room in rooms %}
+            <tr>
+                <td><a href="/room/{{ room.id }}/">{{ room.name }}</a></td>
+                <td>{{ room.capacity }}</td>
+                <td>Zajęta/Wolna</td>
+                <td>{% if room.projector == True %} wyposażona w projektor {% endif %}</td>
+                <td><a href="/room/edit/{{ room.id }}/">Edytuj</a></td>
+                <td><a href="/room/delete/{{ room.id }}/">Usuń</a></td>
+                <td><a href="/room/reserve/{{ room.id }}/">Zarezerwuj</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
