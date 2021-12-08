@@ -42,9 +42,46 @@ class ShowRooms(View):
 
         return render(request, 'rooms.html', {'rooms': rooms})
 
+class ModifyRoom(View):
+    def get(self, request, id: int) -> HttpResponse:
+        room = models.Rooms.objects.get(pk=id)
+
+        return render (request, 'room_modify.html', {'room': room})
+
+    def post(self, request, id: int) -> HttpResponse:
+        room = models.Rooms.objects.get(pk=id)
+
+        name = request.POST.get('name')
+        if name == '':
+            return render(request, 'room_modify.html', {'error': 'Musisz podać nazwę sali konferencyjnej.',
+                                                        'room': room})
+        try:
+            rooms = models.Rooms.objects.get(name__iexact=name)
+            return render(request, 'room_modify.html', {'error': 'Musisz podać unikatową nazwę sali konferencyjnej.',
+                                                        'room': room})
+        except ObjectDoesNotExist:
+            pass
+        room.name = name
+
+        capacity = request.POST.get('capacity')
+        if int(capacity) < 1:
+            return render(request, 'room_modify.html', {'error': 'Pojemność sali konferencyjnej nie może być ujemna.',
+                                                        'room': room})
+        room.capacity = capacity
+        
+        if request.POST.get('projector') == None:
+            projector = False
+        else:
+            projector = True
+        room.projector = projector
+
+        room.save()
+        
+        return redirect('/')
+
 class DeleteRoom(View):
     def get(self, request, id: int) -> HttpResponse:
         room = models.Rooms.objects.get(pk=id)
         room.delete()
-        
+
         return redirect('/')

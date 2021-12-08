@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if error != '' %}    
+        <h1>{{ error }}</h1>
+    {% endif %}
+    <div>
+        <form method="post">{% csrf_token %}
+            <input type="text" maxlength="255" placeholder="Nazwa sali konferencyjnej" name="name" style="width: 20em;" value="{{ room.name }}">
+            <input type="number" min="0" placeholder="Ilość miejsc" name="capacity" style="width: 10em;" value="{{ room.capacity }}">
+            <input type="checkbox" name="projector" {% if room.capacity %} checked {% endif %}>
+                <label for="projector">Projektor</label>
+            <input type="submit" value="Zmodyfikuj salę">
+        </form>
+    </div>
+{% endblock %}
