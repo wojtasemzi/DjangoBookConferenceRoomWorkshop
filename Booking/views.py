@@ -7,10 +7,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from Booking import models
 
 class AddRoom(View):
-    def get(self, request):
+    def get(self, request) -> HttpResponse:
         return render(request, 'add_room.html')
 
-    def post(self, request):
+    def post(self, request) -> HttpResponse:
         name = request.POST.get('name')
         if name == '':
             return render(request, 'add_room.html', {'error': 'Musisz podać nazwę sali konferencyjnej.'})
@@ -34,10 +34,17 @@ class AddRoom(View):
         return redirect('/')
 
 class ShowRooms(View):
-    def get(self, request):
+    def get(self, request) -> HttpResponse:
         try:
             rooms = models.Rooms.objects.all()
         except ObjectDoesNotExist:
             return HttpResponse('Brak dostępnych sal!')
 
         return render(request, 'rooms.html', {'rooms': rooms})
+
+class DeleteRoom(View):
+    def get(self, request, id: int) -> HttpResponse:
+        room = models.Rooms.objects.get(pk=id)
+        room.delete()
+        
+        return redirect('/')
