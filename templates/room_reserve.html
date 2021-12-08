@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if error != '' %}    
+        <h1>{{ error }}</h1>
+    {% endif %}
+    <div>
+        <form method="post">{% csrf_token %}
+            <input type="date" name="date">
+            <input type="text" placeholder="Komantarz" name="comment" style="width: 100em; height: fit-content;">
+            <input type="submit" value="Zarezerwój salę">
+        </form>
+    </div>
+{% endblock %}

@@ -1,3 +1,4 @@
+from datetime import date
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 
@@ -85,3 +86,23 @@ class DeleteRoom(View):
         room.delete()
 
         return redirect('/')
+
+class ReserveRoom(View):
+    def get(self, request, id: int) -> HttpResponse:
+        return render(request, 'room_reserve.html')
+
+    def post(self, request, id: int) -> HttpResponse:
+        room = models.Rooms.objects.get(pk=id)
+        reservations = models.Reservations.objects.all()
+        date_ = request.POST.get('date')
+        date_ = date(int(date_[:4]), int(date_[5:7]), int(date_[8:10]))
+        reservations = reservations.filter(room=room)
+        reservations = reservations.filter(date__exact=date_)
+        if not reservations:
+            if date.today() > date_:
+                return HttpResponse('przeszłość')
+            # else:
+            models.Reservations.objects.create(date=date_, room=room, comment=request.POST.get('comment'))
+            return redirect('/')
+        # models.Reservations.objects.create(date='2021-05-05', room=room, comment='komentarz')
+        return HttpResponse(reservations)
