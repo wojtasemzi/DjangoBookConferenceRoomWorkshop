@@ -10,12 +10,5 @@
             <input type="submit" value="Zarezerwój salę">
         </form>
     </div>
-    <table>
-        {% for reservation in reservations %}
-            <tr>
-                <td>{{ reservation.date }}</td>
-                <td>{{ reservation.comment }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% include 'reservations_include.html' %}
 {% endblock %}

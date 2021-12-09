@@ -6,7 +6,7 @@
                 <td><a href="/room/{{ room.id }}/">{{ room.name }}</a></td>
                 <td>{{ room.capacity }}</td>
                 <td>{% if room.reserved %}Zajęta{% endif %}</td>
-                <td>{% if room.projector == True %} wyposażona w projektor {% endif %}</td>
+                <td>{% if room.projector %} wyposażona w projektor {% endif %}</td>
                 <td><a href="/room/modify/{{ room.id }}/">Edytuj</a></td>
                 <td><a href="/room/delete/{{ room.id }}/">Usuń</a></td>
                 <td><a href="/room/reserve/{{ room.id }}/">Zarezerwuj</a></td>

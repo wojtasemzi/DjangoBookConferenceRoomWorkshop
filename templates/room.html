@@ -10,12 +10,5 @@
             <td><a href="/room/reserve/{{ room.id }}/">Zarezerwuj</a></td>
         </tr>
     </table>
-    <table>
-        {% for reservation in reservations %}
-            <tr>
-                <td>{{ reservation.date }}</td>
-                <td>{{ reservation.comment }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% include 'reservations_include.html' %}
 {% endblock %}
