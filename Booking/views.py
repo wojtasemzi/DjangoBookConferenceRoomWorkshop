@@ -105,7 +105,13 @@ class DeleteRoom(View):
 
 class ReserveRoom(View):
     def get(self, request, id: int) -> HttpResponse:
-        return render(request, 'room_reserve.html')
+        room= models.Rooms.objects.get(pk=id)
+
+        reservations = models.Reservations.objects.all()
+        reservations = reservations.filter(room=room)
+        reservations = reservations.filter(date__gte=date.today()).order_by('date')
+        return render(request, 'room.html', {'room': room,
+                                             'reservations': reservations})
 
     def post(self, request, id: int) -> HttpResponse:
         room = models.Rooms.objects.get(pk=id)
