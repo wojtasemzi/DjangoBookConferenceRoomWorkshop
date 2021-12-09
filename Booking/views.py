@@ -43,6 +43,16 @@ class ShowRooms(View):
 
         return render(request, 'rooms.html', {'rooms': rooms})
 
+class ShowRoom(View):
+    def get(self, request, id: int) -> HttpResponse:
+        room = models.Rooms.objects.get(pk=id)
+
+        reservations = models.Reservations.objects.all()
+        reservations = reservations.filter(room=room)
+        reservations = reservations.filter(date__gte=date.today()).order_by('date')
+        return render(request, 'room.html', {'room': room,
+                                             'reservations': reservations})
+
 class ModifyRoom(View):
     def get(self, request, id: int) -> HttpResponse:
         room = models.Rooms.objects.get(pk=id)
@@ -100,7 +110,7 @@ class ReserveRoom(View):
         reservations = reservations.filter(date__exact=date_)
         if not reservations:
             if date.today() > date_:
-                return HttpResponse('przeszłość')
+                return HttpResponse('przeszłość')  # TODO: error
             # else:
             models.Reservations.objects.create(date=date_, room=room, comment=request.POST.get('comment'))
             return redirect('/')
