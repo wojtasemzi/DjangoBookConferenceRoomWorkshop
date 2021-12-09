@@ -40,8 +40,14 @@ class ShowRooms(View):
             rooms = models.Rooms.objects.all()
         except ObjectDoesNotExist:
             return HttpResponse('Brak dostępnych sal!')
+        reservations = models.Reservations.objects.all()
+        reservations = reservations.filter(date__exact=date.today())
 
-        return render(request, 'rooms.html', {'rooms': rooms})
+        for room in rooms:
+            if reservations.filter(room=room):
+                room.reserved = True
+
+        return render(request, 'rooms.html', {'rooms': rooms,})
 
 class ShowRoom(View):
     def get(self, request, id: int) -> HttpResponse:
